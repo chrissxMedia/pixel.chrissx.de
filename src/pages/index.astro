@@ -1,20 +1,9 @@
-<!doctype html>
-<html lang="en">
+---
+import { BaseLayout } from "cmdesigns";
+import favicon from "../favicon.png";
+---
 
-<head>
-    <title>pixel aka. chrissx</title>
-    <meta name="description" content="pixel's very cool website">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="theme-color" content="#000000">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/style.css">
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/x-icon" sizes="250x250" href="/favicon.ico">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="250x250" href="/favicon.ico">
-</head>
-
-<body>
+<BaseLayout copyrightstart={2021} {favicon} lang="en" title="pixel aka. chrissx" description="pixel's very cool website">
     <header><span class="transpink">pixel</span>&nbsp;aka.&nbsp;<span class="transblue">chrissx</span></header>
     <a href="email_empfangen.flac">EMAIL EMPFANGEN SOUND</a><br />
     <a rel="me" href="//twitter.com/pixelcmtd">Twitter</a><br />
@@ -38,6 +27,25 @@
     Battle.net/Blizzard: chrissx#21230<br />
     Bethesda: chrissxYT<br />
     Minecraft: pixelcmtd<br />
-</body>
+</BaseLayout>
 
-</html>
+<style>
+    html {
+        font-family: Minecraft, Inter, sans-serif;
+        font-size: 18px;
+        padding-left: 20%;
+        padding-right: 20%;
+    }
+
+    header {
+        font-size: 40px;
+        text-align: center;
+        padding-bottom: 20px;
+    }
+
+    * {border-color: #555555}
+    :link, :visited { color: #aaaaaa; }
+
+    .transblue { color: rgb(var(--transblue)); }
+    .transpink { color: rgb(var(--transpink)); }
+</style>

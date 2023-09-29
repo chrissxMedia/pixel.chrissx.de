@@ -1,5 +1,5 @@
 #!/bin/sh
 set -uxe
 
-npm i -g siwedt
-siwedt
+npm i
+npm run build
