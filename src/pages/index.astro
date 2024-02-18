@@ -1,51 +1,95 @@
 ---
-import { BaseLayout } from "cmdesigns";
-import favicon from "../favicon.png";
+import Link from "../components/Link.astro";
+import Links from "../components/Links.astro";
+import Layout from "../layouts/Layout.astro";
 ---
 
-<BaseLayout copyrightstart={2021} {favicon} lang="en" title="pixel aka. chrissx" description="pixel's very cool website">
-    <header><span class="transpink">pixel</span>&nbsp;aka.&nbsp;<span class="transblue">chrissx</span></header>
-    <a href="email_empfangen.flac">EMAIL EMPFANGEN SOUND</a><br />
-    <a rel="me" href="//twitter.com/pixelcmtd">Twitter</a><br />
-    <a rel="me" href="//mastodon.online/@pixel">Mastodon</a><br />
-    <a rel="me" href="//open.spotify.com/artist/2rocyi9EwRuEPwN9gF6Lbv">Spotify</a><br />
-    <a rel="me" href="//music.apple.com/de/artist/chrissx/1480240715">Apple Music</a><br />
-    <a rel="me" href="//tidal.com/browse/artist/16849361">Tidal</a><br />
-    <a rel="me" href="//youtube.com/@chrissxMedia">YouTube: chrissx Media</a><br />
-    <a rel="me" href="//youtube.com/@pixelcmtd">YouTube: XXLP</a><br />
-    <a rel="me" href="//youtube.com/@pixeleng">YouTube: CXClient</a><br />
-    <a rel="me" href="//github.com/pixelcmtd">GitHub</a><br />
-    <a rel="me" href="//reddit.com/u/actual_chrissx/">Reddit</a><br />
-    <a rel="me" href="//raddle.me/u/chrissx">Raddle</a><br />
-    <a rel="me" href="//discord.com/users/231670489779666944">Discord</a><br />
-    <a rel="me" href="//matrix.to/#/@chrissx:matrix.org">Matrix (Element, ...)</a><br />
-    <a rel="me" href="//steamcommunity.com/id/pixelcmtd">Steam</a><br />
-    <a rel="me" href="//instagram.com/pixelcmtd">Instagram</a><br />
-    <a rel="me" href="//community.bisafans.de/index.php?user/95320-chrissx/">BisaBoard</a><br />
-    <a rel="me" href="//de.wikipedia.org/wiki/Benutzerin:Chrissx_official">Wikipedia (DE)</a><br />
-    <a rel="me" href="//en.wikipedia.org/wiki/User:Chrissx_official">Wikipedia (EN)</a><br />
-    Battle.net/Blizzard: chrissx#21230<br />
-    Bethesda: chrissxYT<br />
-    Minecraft: pixelcmtd<br />
-</BaseLayout>
+<Layout>
+    <div class="catgrid">
+        <Links
+            title="Actual socials"
+            rel="me"
+            links={[
+                ["Twitter", "//twitter.com/pixelcmtd"],
+                ["Mastodon", "//mastodon.online/@pixel"],
+                ["Traewelling", "//traewelling.de/@pixel"],
+                ["Reddit", "//reddit.com/u/actual_chrissx/"],
+                ["Raddle", "//raddle.me/u/chrissx"],
+                ["Discord", "//discord.com/users/231670489779666944"],
+                ["Matrix (Element, ...)", "//matrix.to/#/@chrissx:matrix.org"],
+                ["Instagram", "//instagram.com/pixelcmtd"],
+            ]}
+        />
+        <Links
+            title="Music"
+            rel="me"
+            links={[
+                ["Spotify", "//open.spotify.com/artist/2rocyi9EwRuEPwN9gF6Lbv"],
+                [
+                    "Apple Music",
+                    "//music.apple.com/de/artist/chrissx/1480240715",
+                ],
+                ["Tidal", "//tidal.com/browse/artist/16849361"],
+            ]}
+        />
+        <Links
+            title="Games"
+            rel="me"
+            links={[["Steam", "//steamcommunity.com/id/pixelcmtd"]]}
+        >
+            <li style={{ listStyle: "none" }} slot="after">
+                Battle.net/Blizzard: chrissx#21230
+            </li>
+            <li style={{ listStyle: "none" }} slot="after">
+                Bethesda: pixelcmtd
+            </li>
+            <li style={{ listStyle: "none" }} slot="after">
+                Minecraft: pixelcmtd
+            </li>
+        </Links>
+        <Links
+            title="Misc"
+            rel="me"
+            links={[
+                ["YouTube: chrissx Media", "//youtube.com/@chrissxMedia"],
+                ["YouTube: XXLP", "//youtube.com/@pixelcmtd"],
+                ["YouTube: Pixel Engineering", "//youtube.com/@pixeleng"],
+                ["GitHub", "//github.com/pixelcmtd"],
+                [
+                    "BisaBoard",
+                    "//community.bisafans.de/index.php?user/95320-chrissx/",
+                ],
+                [
+                    "Wikipedia (DE)",
+                    "//de.wikipedia.org/wiki/Benutzerin:Chrissx_official",
+                ],
+                [
+                    "Wikipedia (EN)",
+                    "//en.wikipedia.org/wiki/User:Chrissx_official",
+                ],
+            ]}
+        >
+            <Link href="email_empfangen.flac" slot="before">
+                EMAIL EMPFANGEN SOUND
+            </Link>
+        </Links>
+    </div>
+</Layout>
 
 <style>
-    html {
-        font-family: Minecraft, Inter, sans-serif;
-        font-size: 18px;
-        padding-left: 20%;
-        padding-right: 20%;
+    .catgrid {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-evenly;
+        row-gap: 1em;
     }
 
-    header {
-        font-size: 40px;
-        text-align: center;
-        padding-bottom: 20px;
+    li {
+        margin-top: 0.2em;
     }
 
-    * {border-color: #555555}
-    :link, :visited { color: #aaaaaa; }
-
-    .transblue { color: rgb(var(--transblue)); }
-    .transpink { color: rgb(var(--transpink)); }
+    :link,
+    :visited {
+        color: #aaaaaa;
+    }
 </style>

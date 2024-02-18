@@ -1,0 +1,16 @@
+---
+export type Props = astroHTML.JSX.AnchorHTMLAttributes & any;
+---
+
+<li>
+    <a {...Astro.props}>
+        <slot />
+    </a>
+</li>
+
+<style>
+    li {
+        list-style: none;
+        margin-top: 0.2em;
+    }
+</style>

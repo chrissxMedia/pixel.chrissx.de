@@ -1,0 +1,40 @@
+---
+import Link from "./Link.astro";
+
+export type Props = astroHTML.JSX.AnchorHTMLAttributes & {
+    title: string;
+    links: [string, string][];
+};
+---
+
+<div>
+    <ul>
+        <h3>{Astro.props.title}</h3>
+        <slot name="before" />
+        {
+            Astro.props.links.map(([name, href]) => (
+                <Link {...Astro.props} {href}>
+                    {name}
+                </Link>
+            ))
+        }
+        <slot name="after" />
+    </ul>
+</div>
+
+<style>
+    div {
+        min-width: 34%;
+        max-width: 50%;
+    }
+
+    h3 {
+        margin-top: 0;
+        margin-bottom: 0.25em;
+    }
+
+    ul {
+        padding-left: 0.5em;
+        margin: 0;
+    }
+</style>
