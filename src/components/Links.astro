@@ -28,6 +28,13 @@ export type Props = astroHTML.JSX.AnchorHTMLAttributes & {
         max-width: 50%;
     }
 
+    @media screen and (width <= 550px) {
+        div {
+            min-width: 90%;
+            max-width: 90%;
+        }
+    }
+
     h3 {
         margin-top: 0;
         margin-bottom: 0.25em;
