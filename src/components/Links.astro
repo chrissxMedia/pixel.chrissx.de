@@ -3,7 +3,7 @@ import Link from "./Link.astro";
 
 export type Props = astroHTML.JSX.AnchorHTMLAttributes & {
     title: string;
-    links: [string, string][];
+    links: [string, `${string}/${string}`][];
 };
 ---
 
@@ -38,6 +38,7 @@ export type Props = astroHTML.JSX.AnchorHTMLAttributes & {
     h3 {
         margin-top: 0;
         margin-bottom: 0.25em;
+        font-weight: normal;
     }
 
     ul {
