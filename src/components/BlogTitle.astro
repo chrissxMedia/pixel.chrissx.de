@@ -1,0 +1,40 @@
+---
+export interface Props {
+    pub: Date;
+    lang: "en" | "de";
+}
+
+const { pub, lang } = Astro.props;
+---
+
+<div>
+    <slot />
+    <div class="meta">
+        <time datetime={pub.toISOString().substring(0, 7)}>
+            {
+                pub.toLocaleDateString(lang, {
+                    year: "numeric",
+                    month: "2-digit",
+                })
+            }
+        </time>
+        {lang == "de" ? "🇩🇪" : "🇬🇧"}
+    </div>
+</div>
+
+<style>
+    div, div :global(*) {
+        font-family: var(--unifont);
+    }
+    div {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        gap: 1em;
+    }
+    .meta {
+        gap: 0.5em;
+        height: min-content;
+        margin: auto 0;
+    }
+</style>

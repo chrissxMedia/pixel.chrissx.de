@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import BlogTitle from "../../components/BlogTitle.astro";
+
+export async function getStaticPaths() {
+    return getCollection("blog").then((x) =>
+        x.map((a) => ({ params: { id: a.id }, props: a })),
+    );
+}
+
+const {
+    data: { title, pub, lang },
+} = Astro.props;
+const { Content } = await render(Astro.props);
+---
+
+<Layout {lang}>
+    <BlogTitle {pub} {lang}><h1>{title}</h1></BlogTitle>
+    <div class="md">
+        <Content />
+    </div>
+</Layout>
+
+<style>
+    :global(body) {
+        max-width: 800px;
+    }
+    .md {
+        font-family: var(--sans-serif);
+    }
+    .md :global(blockquote) {
+        background-color: #202020;
+        margin: 0.5em;
+        padding: 0.5em;
+        border-radius: 0.5em;
+    }
+    .md :global(blockquote) :global(p) {
+        margin: 0;
+    }
+    .md :global(.astro-code),
+    .md :global(.astro-code) :global(span) {
+        background-color: #202020 !important;
+    }
+</style>

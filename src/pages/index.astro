@@ -1,10 +1,17 @@
 ---
+import ArticleCard from "../components/ArticleCard.astro";
 import Link from "../components/Link.astro";
 import Links from "../components/Links.astro";
 import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const blog = (await getCollection("blog"))
+    .filter((x) => x.data.pub < new Date())
+    .sort((a, b) => b.data.pub.valueOf() - a.data.pub.valueOf());
 ---
 
 <Layout>
+    <h2>Links</h2>
     <div class="catgrid">
         <Links
             title="Actual socials"
@@ -16,7 +23,7 @@ import Layout from "../layouts/Layout.astro";
                 ["Reddit", "//reddit.com/u/actual_chrissx/"],
                 ["Raddle", "//raddle.me/u/chrissx"],
                 ["Discord", "//discord.com/users/231670489779666944"],
-                ["Matrix (Element, ...)", "//matrix.to/#/@chrissx:matrix.org"],
+                ["Matrix", "//matrix.to/#/@chrissx:matrix.org"],
                 ["Instagram", "//instagram.com/pixelcmtd"],
             ]}
         />
@@ -69,14 +76,30 @@ import Layout from "../layouts/Layout.astro";
             </Link>
         </Links>
     </div>
+    <h2>Blog Articles</h2>
+    <ul>
+        {blog.map((x) => <ArticleCard {...x} />)}
+    </ul>
 </Layout>
 
 <style>
+    h2 {
+        width: max-content;
+        margin: 0.5em auto;
+    }
+
     .catgrid {
         display: flex;
         flex-flow: row wrap;
         justify-content: space-evenly;
         row-gap: 1em;
+    }
+
+    ul {
+        display: flex;
+        gap: 1em;
+        padding: 0;
+        flex-flow: column;
     }
 
     li {

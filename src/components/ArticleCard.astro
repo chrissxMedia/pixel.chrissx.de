@@ -1,0 +1,80 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BlogTitle from "./BlogTitle.astro";
+
+export type Props = CollectionEntry<"blog">;
+
+const {
+    data: { title, pub, lang },
+    body,
+    id,
+} = Astro.props;
+
+let preview = body
+    ?.split(/\n\n+|  \n+/)
+    .find((x) => x && !/^[#<>\-=_*¹-⁹]/.test(x))
+    ?.split(/\s+/)
+    .reduce((p, e) => (p.length > 250 ? p : p + " " + e));
+preview = preview
+    // TODO: there is probably a unicode class for this
+    ?.replace(/[,;.?!]*$/, "…")
+    .replaceAll(/\[(.+?)\]\(.+?\)/g, "$1")
+    .replaceAll(/\*(.+?)\*|_(.+?)_/g, "$1");
+---
+
+<li {lang}>
+    <a href={`/blog/${id}`}>
+        <BlogTitle {pub} {lang}><h3>{title}</h3></BlogTitle>
+        <p>{preview}</p>
+    </a>
+</li>
+
+<style>
+    li {
+        list-style: none;
+        display: flex;
+        padding: 0.25rem;
+        background-color: #202020;
+        color: #ffffff;
+        background-image: none;
+        background-size: 400%;
+        border-radius: 0.8rem;
+        background-position: 100%;
+        transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        box-shadow:
+            0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    }
+    li > a {
+        width: 100%;
+        text-decoration: none;
+        line-height: 1.4;
+        padding: 1rem 1.3rem;
+        border-radius: 0.35rem;
+        color: #ffffff;
+        background-color: #202020;
+        opacity: 0.8;
+    }
+    h3 {
+        margin: 0;
+        font-size: 1.25em;
+        transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    p {
+        margin-top: 0.5rem;
+        margin-bottom: 0;
+        color: #cccccc;
+        font-family: var(--sans-serif);
+    }
+    li:is(:hover, :focus-within) {
+        background-position: 0;
+        background-image: linear-gradient(
+            45deg,
+            rgb(var(--transblue)),
+            rgb(var(--transpink)) 50%
+        );
+    }
+    li:is(:hover, :focus-within) h3 {
+        color: rgb(var(--transpink));
+    }
+</style>
