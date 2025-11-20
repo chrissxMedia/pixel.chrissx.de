@@ -37,15 +37,9 @@ import Layout from "../layouts/Layout.astro";
             rel="me"
             links={[["Steam", "//steamcommunity.com/id/pixelcmtd"]]}
         >
-            <li style={{ listStyle: "none" }} slot="after">
-                Battle.net/Blizzard: chrissx#21230
-            </li>
-            <li style={{ listStyle: "none" }} slot="after">
-                Bethesda: pixelcmtd
-            </li>
-            <li style={{ listStyle: "none" }} slot="after">
-                Minecraft: pixelcmtd
-            </li>
+            <li slot="after">Battle.net/Blizzard: chrissx#21230</li>
+            <li slot="after">Bethesda: pixelcmtd</li>
+            <li slot="after">Minecraft: pixelcmtd</li>
         </Links>
         <Links
             title="Misc"
@@ -86,6 +80,7 @@ import Layout from "../layouts/Layout.astro";
     }
 
     li {
+        list-style: none;
         margin-top: 0.2em;
     }
 
