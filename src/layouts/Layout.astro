@@ -2,14 +2,17 @@
 import { BaseLayout, Footer } from "cmdesigns";
 import favicon from "../favicon.png";
 import Header from "../components/Header.astro";
+
+export interface Props {
+    title?: string;
+    lang?: string;
+}
+
+let { title, lang = "en" } = Astro.props;
+title = title ? `${title} | pixel` : "pixel aka. chrissx";
 ---
 
-<BaseLayout
-    {favicon}
-    lang="en"
-    title="pixel aka. chrissx"
-    description="pixel's very cool website"
->
+<BaseLayout {favicon} {lang} {title} description="pixel's very cool website">
     <Header />
     <div class="content">
         <slot />
