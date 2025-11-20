@@ -11,7 +11,9 @@ import Header from "../components/Header.astro";
     description="pixel's very cool website"
 >
     <Header />
-    <slot />
+    <div class="content">
+        <slot />
+    </div>
     <Footer
         start={2021}
         rightsholder="Pixel Häußler, chrissx Media"
@@ -22,8 +24,10 @@ import Header from "../components/Header.astro";
 <style>
     :global(body) {
         font-family: var(--minecraft);
-        font-size: 18px;
-        max-width: 1200px;
+        max-width: 1000px;
         margin: 0 auto;
+    }
+    .content {
+        margin: 0 0.5em;
     }
 </style>
