@@ -15,7 +15,7 @@ const {
 const { Content } = await render(Astro.props);
 ---
 
-<Layout {lang}>
+<Layout {lang} {title}>
     <BlogTitle {pub} {lang}><h1>{title}</h1></BlogTitle>
     <div class="md">
         <Content />
