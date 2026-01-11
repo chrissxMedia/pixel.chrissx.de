@@ -1,7 +1,7 @@
 ---
 import Link from "./Link.astro";
 
-export type Props = astroHTML.JSX.AnchorHTMLAttributes & {
+export type Props = {
     title: string;
     links: [string, `${string}/${string}`][];
 };
@@ -13,7 +13,7 @@ export type Props = astroHTML.JSX.AnchorHTMLAttributes & {
         <slot name="before" />
         {
             Astro.props.links.map(([name, href]) => (
-                <Link {...Astro.props} {href}>
+                <Link rel="me" {href}>
                     {name}
                 </Link>
             ))
