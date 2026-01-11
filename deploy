@@ -1,5 +1,5 @@
 #!/bin/sh
 set -uxe
 
-npm i
+npm ci
 npm run build
