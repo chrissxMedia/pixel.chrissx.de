@@ -1,24 +1,13 @@
 ---
-import Link from "./Link.astro";
-
 export type Props = {
     title: string;
-    links: [string, `${string}/${string}`][];
 };
 ---
 
 <div>
     <ul>
         <h3>{Astro.props.title}</h3>
-        <slot name="before" />
-        {
-            Astro.props.links.map(([name, href]) => (
-                <Link rel="me" {href}>
-                    {name}
-                </Link>
-            ))
-        }
-        <slot name="after" />
+        <slot />
     </ul>
 </div>
 
