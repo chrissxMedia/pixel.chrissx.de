@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@shikijs/colorized-brackets": "^3.15.0",
-    "astro": "^5.0.0",
+    "astro": "^5.18.1",
     "cmdesigns": "^0.1.0"
   }
 }
