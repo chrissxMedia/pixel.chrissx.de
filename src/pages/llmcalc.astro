@@ -1,0 +1,336 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="LLM Calc">
+    <div class="calc">
+    <h2>LLM inference cost calculator</h2>
+    <p>
+        Compare cloud API pricing against running locally (electricity cost),
+        and find the breakeven price if you were to resell inference.
+        Local cost assumes the machine runs 24/7 and serves your monthly token
+        volume; all other time is counted at idle draw.
+    </p>
+
+    <div class="grid">
+        <fieldset>
+            <legend>Cloud pricing ($/M tokens)</legend>
+            <label>
+                Input
+                <input id="c_in" type="number" inputmode="decimal" min="0" step="any" value="2.50" />
+            </label>
+            <label>
+                Cache read
+                <input id="c_cache" type="number" inputmode="decimal" min="0" step="any" value="0.25" />
+            </label>
+            <label>
+                Output
+                <input id="c_out" type="number" inputmode="decimal" min="0" step="any" value="10" />
+            </label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Monthly usage (M tokens)</legend>
+            <label>
+                Input
+                <input id="u_in" type="number" inputmode="decimal" min="0" step="any" value="2" />
+            </label>
+            <label>
+                Cache read
+                <input id="u_cache" type="number" inputmode="decimal" min="0" step="any" value="7" />
+            </label>
+            <label>
+                Output
+                <input id="u_out" type="number" inputmode="decimal" min="0" step="any" value="1" />
+            </label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Local hardware</legend>
+            <label>
+                Power draw at load (W)
+                <input id="l_load" type="number" inputmode="decimal" min="0" step="any" value="420" />
+            </label>
+            <label>
+                Power draw at idle (W)
+                <input id="l_idle" type="number" inputmode="decimal" min="0" step="any" value="69" />
+            </label>
+            <label>
+                Electricity ($/kWh)
+                <input id="l_ct" type="number" inputmode="decimal" min="0" step="any" value="0.50" />
+            </label>
+            <label>
+                Input (t/s)
+                <input id="l_tps_in" type="number" inputmode="decimal" min="0" step="any" value="600" />
+            </label>
+            <label>
+                Output (t/s)
+                <input id="l_tps_out" type="number" inputmode="decimal" min="0" step="any" value="30" />
+            </label>
+        </fieldset>
+    </div>
+
+    <div class="results-row">
+        <div class="card">
+            <h3>Cloud <small>(monthly)</small></h3>
+            <output id="r_cloud">—</output>
+        </div>
+        <div class="card">
+            <h3>Local <small>(monthly)</small></h3>
+            <output id="r_local">—</output>
+        </div>
+    </div>
+
+    <div class="results-row">
+        <div class="card">
+            <h3>At load</h3>
+            <output id="r_load">—</output>
+            <small>input + output time, per month</small>
+        </div>
+        <div class="card">
+            <h3>Total energy</h3>
+            <output id="r_kwh">—</output>
+            <small>per month</small>
+        </div>
+        <div class="card">
+            <h3>Input power</h3>
+            <output id="r_kwh_in">—</output>
+            <small>kWh / M tokens</small>
+        </div>
+        <div class="card">
+            <h3>Output power</h3>
+            <output id="r_kwh_out">—</output>
+            <small>kWh / M tokens</small>
+        </div>
+    </div>
+
+    <div class="results-row breakeven">
+        <div class="card wide">
+            <h3>Breakeven price</h3>
+            <output id="r_breakeven">—</output>
+            <small>blended, per M tokens, to cover energy cost</small>
+        </div>
+        <div class="card">
+            <h3>Input</h3>
+            <output id="r_be_in">—</output>
+            <small>/M tokens</small>
+        </div>
+        <div class="card">
+            <h3>Cache</h3>
+            <output id="r_be_cache">—</output>
+            <small>97% off input</small>
+        </div>
+        <div class="card">
+            <h3>Output</h3>
+            <output id="r_be_out">—</output>
+            <small>/M tokens</small>
+        </div>
+    </div>
+
+    <small id="r_status" class="status"></small>
+    </div>
+</Layout>
+
+<script>
+    const MONTH_HOURS = 30 * 24;
+
+    const el = (id: string) => document.getElementById(id)! as HTMLInputElement;
+    const num = (id: string) => {
+        const v = parseFloat(el(id).value);
+        return Number.isFinite(v) ? v : 0;
+    };
+    const set = (id: string, text: string) => {
+        (document.getElementById(id) as HTMLElement)!.textContent = text;
+    };
+    const money = (n: number) => {
+        if (!Number.isFinite(n)) return "—";
+        const digits = Math.abs(n) < 1 ? 3 : 2;
+        return `$${n.toLocaleString(undefined, {
+            minimumFractionDigits: digits,
+            maximumFractionDigits: digits,
+        })}`;
+    };
+
+    function calc() {
+        const mIn = num("u_in");
+        const mCache = num("u_cache");
+        const mOut = num("u_out");
+        const totalM = mIn + mCache + mOut;
+        const cloud =
+            num("c_in") * mIn + num("c_cache") * mCache + num("c_out") * mOut;
+
+        // Cache is instant (no load time). Only input (at input t/s) and
+        // output (at output t/s) drive load.
+        const tpsIn = num("l_tps_in");
+        const tpsOut = num("l_tps_out");
+        let impossible = false;
+        const inLoad = mIn > 0 && tpsIn > 0 ? (mIn * 1e6) / tpsIn : 0;
+        const outLoad = mOut > 0 && tpsOut > 0 ? (mOut * 1e6) / tpsOut : 0;
+        if ((mIn > 0 && tpsIn <= 0) || (mOut > 0 && tpsOut <= 0))
+            impossible = true;
+
+        const loadHours = (inLoad + outLoad) / 3600;
+        if (loadHours > MONTH_HOURS) impossible = true;
+        const effLoad = Math.min(loadHours, MONTH_HOURS);
+        const idleHours = MONTH_HOURS - effLoad;
+        const kwh = (effLoad * num("l_load") + idleHours * num("l_idle")) / 1000;
+        const local = kwh * num("l_ct");
+
+        set("r_cloud", money(cloud));
+        set("r_local", money(local));
+        set("r_load", `${Math.round(loadHours)} h`);
+        set("r_kwh", `${kwh.toFixed(1)} kWh`);
+
+        const totalLoad = inLoad + outLoad;
+        const fIn = totalLoad > 0 ? inLoad / totalLoad : 0.5;
+        const fOut = 1 - fIn;
+        const kwhIn = mIn > 0 ? (kwh * fIn) / mIn : Infinity;
+        const kwhOut = mOut > 0 ? (kwh * fOut) / mOut : Infinity;
+        set(
+            "r_kwh_in",
+            Number.isFinite(kwhIn) ? kwhIn.toFixed(1) : "—"
+        );
+        set(
+            "r_kwh_out",
+            Number.isFinite(kwhOut) ? kwhOut.toFixed(1) : "—"
+        );
+
+        const status = document.getElementById("r_status") as HTMLElement;
+        status.style.display = impossible ? "block" : "none";
+        if (impossible)
+            status.textContent =
+                "⚠ that usage doesn't fit in a month at those t/s values";
+
+        // Breakeven: assign local cost to input and output by their share of
+        // the load time. Cache is free to run, so it's priced at 3% of the
+        // input price and its revenue offsets the input cost. Chosen so that
+        // charging this triple on the usage mix covers exactly the local cost.
+        const localIn = local * fIn;
+        const localOut = local * fOut;
+        const inEffM = mIn + 0.03 * mCache;
+        const beIn = inEffM > 0 ? localIn / inEffM : Infinity;
+        const beCache = 0.03 * beIn;
+        const beOut = mOut > 0 ? localOut / mOut : Infinity;
+
+        const breakeven = totalM > 0 ? local / totalM : Infinity;
+        set("r_breakeven", money(breakeven));
+        set("r_be_in", money(beIn));
+        set("r_be_cache", money(beCache));
+        set("r_be_out", money(beOut));
+    }
+
+    document.querySelectorAll("input").forEach((elm) => elm.addEventListener("input", calc));
+    calc();
+</script>
+
+<style>
+    .calc {
+        font-family: var(--unifont);
+    }
+
+    p {
+        font-size: 0.9em;
+    }
+
+    h2 {
+        font-family: var(--minecraft);
+        width: max-content;
+        margin: 0.5em auto;
+    }
+
+    .grid {
+        display: flex;
+        flex-flow: row wrap;
+        gap: 1em;
+        align-items: stretch;
+        margin: 1.5em 0;
+    }
+
+    fieldset {
+        flex: 1 1 230px;
+        min-width: 0;
+        border: 1px solid #444;
+        border-radius: 4px;
+        padding: 0.5em 1em 1em;
+        margin: 0;
+    }
+
+    legend {
+        padding: 0 0.4em;
+        color: rgb(var(--transpink));
+        font-weight: bold;
+    }
+
+    label {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 0.4em;
+        margin: 0.4em 0;
+        font-size: 0.9em;
+    }
+
+    input {
+        width: 6em;
+        max-width: 100%;
+        background: rgb(var(--cmblack));
+        color: white;
+        border: 1px solid #444;
+        border-radius: 3px;
+        padding: 0.25em 0.4em;
+        font-family: inherit;
+    }
+
+    .results-row {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-evenly;
+        align-items: stretch;
+        gap: 1em;
+        margin: 1em 0;
+    }
+
+    .card {
+        flex: 1 1 130px;
+        min-width: 110px;
+        border: 1px solid #444;
+        border-radius: 4px;
+        padding: 0.5em 1em 0.6em;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .card.wide {
+        flex: 1.6 1 200px;
+    }
+
+    .card h3 {
+        margin: 0 0 0.2em;
+        font-weight: normal;
+        font-size: 0.95em;
+        color: rgb(var(--transpink));
+    }
+
+    output {
+        display: block;
+        font-size: 1.8em;
+        color: rgb(var(--transblue));
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    small {
+        display: block;
+        margin-top: 0.3em;
+        color: #888;
+        font-size: 0.75em;
+    }
+
+    .status {
+        display: none;
+        width: max-content;
+        margin: 0.5em auto;
+        color: rgb(var(--fgorange));
+    }
+</style>
