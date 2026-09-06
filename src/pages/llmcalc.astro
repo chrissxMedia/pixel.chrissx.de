@@ -150,6 +150,7 @@ import Layout from "../layouts/Layout.astro";
             maximumFractionDigits: digits,
         })}`;
     };
+    const ratio = (n: number) => (Number.isFinite(n) ? n.toFixed(1) : "—");
 
     function calc() {
         const mIn = num("u_in");
@@ -160,17 +161,12 @@ import Layout from "../layouts/Layout.astro";
             num("c_in") * mIn + num("c_cache") * mCache + num("c_out") * mOut;
 
         // Cache is instant (no load time). Only input (at input t/s) and
-        // output (at output t/s) drive load.
-        const tpsIn = num("l_tps_in");
-        const tpsOut = num("l_tps_out");
-        let impossible = false;
-        const inLoad = mIn > 0 && tpsIn > 0 ? (mIn * 1e6) / tpsIn : 0;
-        const outLoad = mOut > 0 && tpsOut > 0 ? (mOut * 1e6) / tpsOut : 0;
-        if ((mIn > 0 && tpsIn <= 0) || (mOut > 0 && tpsOut <= 0))
-            impossible = true;
-
+        // output (at output t/s) drive load. A t/s of 0 makes the load
+        // infinite.
+        const inLoad = mIn === 0 ? 0 : (mIn * 1e6) / num("l_tps_in");
+        const outLoad = mOut === 0 ? 0 : (mOut * 1e6) / num("l_tps_out");
         const loadHours = (inLoad + outLoad) / 3600;
-        if (loadHours > MONTH_HOURS) impossible = true;
+        const impossible = loadHours > MONTH_HOURS;
         const effLoad = Math.min(loadHours, MONTH_HOURS);
         const idleHours = MONTH_HOURS - effLoad;
         const kwh = (effLoad * num("l_load") + idleHours * num("l_idle")) / 1000;
@@ -178,7 +174,7 @@ import Layout from "../layouts/Layout.astro";
 
         set("r_cloud", money(cloud));
         set("r_local", money(local));
-        set("r_load", `${Math.round(loadHours)} h`);
+        set("r_load", Number.isFinite(loadHours) ? `${Math.round(loadHours)} h` : "∞ h");
         set("r_kwh", `${kwh.toFixed(1)} kWh`);
 
         const totalLoad = inLoad + outLoad;
@@ -186,14 +182,8 @@ import Layout from "../layouts/Layout.astro";
         const fOut = 1 - fIn;
         const kwhIn = mIn > 0 ? (kwh * fIn) / mIn : Infinity;
         const kwhOut = mOut > 0 ? (kwh * fOut) / mOut : Infinity;
-        set(
-            "r_kwh_in",
-            Number.isFinite(kwhIn) ? kwhIn.toFixed(1) : "—"
-        );
-        set(
-            "r_kwh_out",
-            Number.isFinite(kwhOut) ? kwhOut.toFixed(1) : "—"
-        );
+        set("r_kwh_in", ratio(kwhIn));
+        set("r_kwh_out", ratio(kwhOut));
 
         const status = document.getElementById("r_status") as HTMLElement;
         status.style.display = impossible ? "block" : "none";
