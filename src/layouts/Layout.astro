@@ -13,6 +13,7 @@ title = title ? `${title} | pixel` : "pixel aka. chrissx";
 ---
 
 <BaseLayout {favicon} {lang} {title} description="pixel's very cool website">
+    <link rel="alternate" type="application/rss+xml" title="pixel's blog" href="/blog/rss.xml" slot="head" />
     <Header />
     <div class="content">
         <slot />
