@@ -5,6 +5,7 @@ const scad = await fetch("https://raw.githubusercontent.com/shikijs/textmate-gra
 .then(r => r.text().then(JSON.parse));
 
 export default defineConfig({
+    site: "https://gock.dev",
     markdown: {
         shikiConfig: {
             theme: "github-dark",
