@@ -4,34 +4,25 @@ export type Props = {
 };
 ---
 
-<div>
+<section>
+    <h3>{Astro.props.title}</h3>
     <ul>
-        <h3>{Astro.props.title}</h3>
         <slot />
     </ul>
-</div>
+</section>
 
 <style>
-    div {
-        min-width: 34%;
-        max-width: 50%;
-    }
-
-    @media screen and (width <= 550px) {
-        div {
-            min-width: 90%;
-            max-width: 90%;
-        }
-    }
-
     h3 {
         margin-top: 0;
-        margin-bottom: 0.25em;
+        margin-bottom: 0.75em;
         font-weight: normal;
     }
 
     ul {
-        padding-left: 0.5em;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+        gap: 1em;
+        padding: 0;
         margin: 0;
     }
 </style>

@@ -1,16 +1,67 @@
 ---
-export type Props = astroHTML.JSX.AnchorHTMLAttributes;
+export type Props = astroHTML.JSX.AnchorHTMLAttributes & {
+    image?: string;
+    subtitle?: string;
+};
+
+const { image, subtitle, ...attributes } = Astro.props;
 ---
 
 <li>
-    <a {...Astro.props}>
-        <slot />
+    <a {...attributes}>
+        {image && <img src={image} alt="" width="48" height="48" loading="lazy" />}
+        <span>
+            <strong><slot /></strong>
+            {subtitle && <small>{subtitle}</small>}
+        </span>
     </a>
 </li>
 
 <style>
     li {
         list-style: none;
-        margin-top: 0.2em;
+        display: flex;
+        min-width: 0;
+    }
+
+    a {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 0;
+        min-height: 5rem;
+        box-sizing: border-box;
+        padding: 1rem;
+        border: 1px solid #333333;
+        border-radius: 0.8rem;
+        background: #0f0f0f;
+        color: #ffffff;
+        font-family: var(--unifont);
+        text-decoration: none;
+        overflow-wrap: anywhere;
+    }
+
+    a[href]:is(:hover, :focus-visible) {
+        background: #333333;
+    }
+
+    a[href]:focus-visible {
+        outline: 2px solid rgb(var(--transpink));
+        outline-offset: 3px;
+    }
+
+    img {
+        flex-shrink: 0;
+        filter: invert(1);
+    }
+
+    span {
+        min-width: 0;
+    }
+
+    small {
+        display: block;
+        color: #cccccc;
     }
 </style>

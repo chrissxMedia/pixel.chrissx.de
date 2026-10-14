@@ -4,6 +4,22 @@ import Link from "../components/Link.astro";
 import Links from "../components/Links.astro";
 import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
+import mastodonLogo from "simple-icons/icons/mastodon.svg?url&no-inline";
+import twitterLogo from "simple-icons/icons/twitter.svg?url&no-inline";
+import instagramLogo from "simple-icons/icons/instagram.svg?url&no-inline";
+import redditLogo from "simple-icons/icons/reddit.svg?url&no-inline";
+import signalLogo from "simple-icons/icons/signal.svg?url&no-inline";
+import discordLogo from "simple-icons/icons/discord.svg?url&no-inline";
+import matrixLogo from "simple-icons/icons/matrix.svg?url&no-inline";
+import tiktokLogo from "simple-icons/icons/tiktok.svg?url&no-inline";
+import spotifyLogo from "simple-icons/icons/spotify.svg?url&no-inline";
+import appleMusicLogo from "simple-icons/icons/applemusic.svg?url&no-inline";
+import tidalLogo from "simple-icons/icons/tidal.svg?url&no-inline";
+import steamLogo from "simple-icons/icons/steam.svg?url&no-inline";
+import youtubeLogo from "simple-icons/icons/youtube.svg?url&no-inline";
+import twitchLogo from "simple-icons/icons/twitch.svg?url&no-inline";
+import githubLogo from "simple-icons/icons/github.svg?url&no-inline";
+import wikipediaLogo from "simple-icons/icons/wikipedia.svg?url&no-inline";
 
 const blog = (await getCollection("blog"))
     .filter((x) => x.data.pub < new Date())
@@ -14,77 +30,178 @@ const blog = (await getCollection("blog"))
     <h2>Links</h2>
     <div class="catgrid">
         <Links title="Socials">
-            <Link rel="me" href="//mastodon.online/@pixel">Mastodon/Fedi</Link>
-            <Link rel="me" href="//twitter.com/pixelcmtd">Twitter</Link>
-            <Link rel="me" href="//instagram.com/pixelcmtd">Instagram</Link>
-            <Link rel="me" href="//traewelling.de/@pixel">Traewelling</Link>
-            <Link rel="me" href="//reddit.com/u/actual_chrissx/">Reddit</Link>
-            <Link rel="me" href="//raddle.me/u/chrissx">Raddle</Link>
             <Link
                 rel="me"
-                href="//signal.me/#eu/p9yEG-BF-JVYkCYlnmrYd5aTpC1tiZ2eJygZJSHgvdkqtpvXgqVBqYj9YuWqfNJ6"
+                href="https://mastodon.online/@pixel"
+                image={mastodonLogo}
+                subtitle="@pixel@mastodon.online"
             >
-                Signal @pxl.69
+                Mastodon/Fedi
             </Link>
-            <Link rel="me" href="//discord.com/users/231670489779666944">
-                Discord @pixelcmtd
+            <Link
+                rel="me"
+                href="https://twitter.com/pixelcmtd"
+                image={twitterLogo}
+                subtitle="@pixelcmtd"
+            >
+                Twitter
             </Link>
-            <Link rel="me" href="//matrix.to/#/@chrissx:matrix.org">
+            <Link
+                rel="me"
+                href="https://instagram.com/pixelcmtd"
+                image={instagramLogo}
+                subtitle="@pixelcmtd"
+            >
+                Instagram
+            </Link>
+            <Link rel="me" href="https://traewelling.de/@pixel" subtitle="@pixel">
+                Träwelling
+            </Link>
+            <Link
+                rel="me"
+                href="https://reddit.com/u/actual_chrissx/"
+                image={redditLogo}
+                subtitle="u/actual_chrissx"
+            >
+                Reddit
+            </Link>
+            <Link rel="me" href="https://raddle.me/u/chrissx" subtitle="u/chrissx">
+                Raddle
+            </Link>
+            <Link
+                rel="me"
+                href="https://signal.me/#eu/p9yEG-BF-JVYkCYlnmrYd5aTpC1tiZ2eJygZJSHgvdkqtpvXgqVBqYj9YuWqfNJ6"
+                image={signalLogo}
+                subtitle="@pxl.69"
+            >
+                Signal
+            </Link>
+            <Link
+                rel="me"
+                href="https://discord.com/users/231670489779666944"
+                image={discordLogo}
+                subtitle="@pixelcmtd"
+            >
+                Discord
+            </Link>
+            <Link
+                rel="me"
+                href="https://matrix.to/#/@chrissx:matrix.org"
+                image={matrixLogo}
+                subtitle="@chrissx:matrix.org"
+            >
                 Matrix
             </Link>
-            <Link rel="me" href="//tiktok.com/@pixelcmtd">TikTok</Link>
+            <Link
+                rel="me"
+                href="https://tiktok.com/@pixelcmtd"
+                image={tiktokLogo}
+                subtitle="@pixelcmtd"
+            >
+                TikTok
+            </Link>
         </Links>
         <Links title="Music">
             <Link
                 rel="me"
-                href="//open.spotify.com/artist/2rocyi9EwRuEPwN9gF6Lbv"
+                href="https://open.spotify.com/artist/2rocyi9EwRuEPwN9gF6Lbv"
+                image={spotifyLogo}
             >
                 Spotify
             </Link>
             <Link
                 rel="me"
-                href="//music.apple.com/de/artist/chrissx/1480240715"
+                href="https://music.apple.com/de/artist/chrissx/1480240715"
+                image={appleMusicLogo}
             >
                 Apple Music
             </Link>
-            <Link rel="me" href="//tidal.com/browse/artist/16849361">
+            <Link
+                rel="me"
+                href="https://tidal.com/browse/artist/16849361"
+                image={tidalLogo}
+            >
                 Tidal
             </Link>
         </Links>
         <Links title="Games">
-            <Link rel="me" href="//steamcommunity.com/id/pixelcmtd">Steam</Link>
-            <li>Battle.net/Blizzard: chrissx#21230</li>
-            <li>Bethesda: pixelcmtd</li>
-            <li>Minecraft: pixelcmtd</li>
+            <Link
+                rel="me"
+                href="https://steamcommunity.com/id/pixelcmtd"
+                image={steamLogo}
+                subtitle="pixelcmtd"
+            >
+                Steam
+            </Link>
+            <Link subtitle="chrissx#21230">Battle.net/Blizzard</Link>
+            <Link subtitle="pixelcmtd">Bethesda</Link>
+            <Link subtitle="pixelcmtd">Minecraft</Link>
         </Links>
         <Links title="Misc">
             <Link href="/llmcalc">LLM inference cost calculator</Link>
             <Link href="email_empfangen.flac">EMAIL EMPFANGEN SOUND</Link>
-            <Link rel="me" href="//youtube.com/@chrissxMedia">
-                YouTube: chrissx Media
-            </Link>
-            <Link rel="me" href="//youtube.com/@pixelcmtd">YouTube: XXLP</Link>
-            <Link rel="me" href="//youtube.com/@pixeleng">
-                YouTube: Pixel Engineering
-            </Link>
-            <Link rel="me" href="//twitch.tv/pixeleng">
-                Twitch: Pixel Engineering
-            </Link>
-            <Link rel="me" href="//github.com/pixelcmtd">GitHub</Link>
-            <Link rel="me" href="//ngl.link/pixel76232">NGL</Link>
             <Link
                 rel="me"
-                href="//community.bisafans.de/index.php?user/95320-chrissx/"
+                href="https://youtube.com/@chrissxMedia"
+                image={youtubeLogo}
+                subtitle="@chrissxMedia"
+            >
+                YouTube: chrissx Media
+            </Link>
+            <Link
+                rel="me"
+                href="https://youtube.com/@pixelcmtd"
+                image={youtubeLogo}
+                subtitle="@pixelcmtd"
+            >
+                YouTube: XXLP
+            </Link>
+            <Link
+                rel="me"
+                href="https://youtube.com/@pixeleng"
+                image={youtubeLogo}
+                subtitle="@pixeleng"
+            >
+                YouTube: Pixel Engineering
+            </Link>
+            <Link
+                rel="me"
+                href="https://twitch.tv/pixeleng"
+                image={twitchLogo}
+                subtitle="@pixeleng"
+            >
+                Twitch: Pixel Engineering
+            </Link>
+            <Link
+                rel="me"
+                href="https://github.com/pixelcmtd"
+                image={githubLogo}
+                subtitle="@pixelcmtd"
+            >
+                GitHub
+            </Link>
+            <Link rel="me" href="https://ngl.link/pixel76232" subtitle="pixel76232">NGL</Link>
+            <Link
+                rel="me"
+                href="https://community.bisafans.de/index.php?user/95320-chrissx/"
+                subtitle="chrissx"
             >
                 BisaBoard
             </Link>
             <Link
                 rel="me"
-                href="//de.wikipedia.org/wiki/Benutzerin:Chrissx_official"
+                href="https://de.wikipedia.org/wiki/Benutzerin:Chrissx_official"
+                image={wikipediaLogo}
+                subtitle="Chrissx_official"
             >
                 Wikipedia (DE)
             </Link>
-            <Link rel="me" href="//en.wikipedia.org/wiki/User:Chrissx_official">
+            <Link
+                rel="me"
+                href="https://en.wikipedia.org/wiki/User:Chrissx_official"
+                image={wikipediaLogo}
+                subtitle="Chrissx_official"
+            >
                 Wikipedia (EN)
             </Link>
         </Links>
@@ -102,10 +219,9 @@ const blog = (await getCollection("blog"))
     }
 
     .catgrid {
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: space-evenly;
-        row-gap: 1em;
+        display: grid;
+        gap: 1.5em;
+        margin-bottom: 2em;
     }
 
     ul {
@@ -113,15 +229,5 @@ const blog = (await getCollection("blog"))
         gap: 1em;
         padding: 0;
         flex-flow: column;
-    }
-
-    li {
-        list-style: none;
-        margin-top: 0.2em;
-    }
-
-    :link,
-    :visited {
-        color: #aaaaaa;
     }
 </style>
