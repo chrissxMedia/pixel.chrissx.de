@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { LinkCard } from "cmdesigns";
 import BlogTitle from "./BlogTitle.astro";
 
 export type Props = CollectionEntry<"blog">;
@@ -23,37 +24,25 @@ preview = preview
 ---
 
 <li {lang}>
-    <a href={`/blog/${id}`}>
+    <LinkCard
+        href={`/blog/${id}`}
+        highlightBackground="linear-gradient(45deg, rgb(var(--transblue)), rgb(var(--transpink)))"
+    >
         <BlogTitle {pub} {lang}><h3>{title}</h3></BlogTitle>
         <p>{preview}</p>
-    </a>
+    </LinkCard>
 </li>
 
 <style>
     li {
         list-style: none;
-        display: flex;
-        padding: 0.25rem;
-        background-color: #202020;
-        color: #ffffff;
-        background-image: none;
-        background-size: 400%;
-        border-radius: 0.8rem;
-        background-position: 100%;
-        transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-        box-shadow:
-            0 4px 6px -1px rgba(0, 0, 0, 0.1),
-            0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    }
-    li > a {
-        width: 100%;
-        text-decoration: none;
         line-height: 1.4;
+    }
+    li > :global(.cm-link-card[data-frame] > .content) {
         padding: 1rem 1.3rem;
-        border-radius: 0.35rem;
-        color: #ffffff;
-        background-color: #202020;
-        opacity: 0.8;
+    }
+    li :global(time) {
+        white-space: nowrap;
     }
     h3 {
         margin: 0;
@@ -65,14 +54,6 @@ preview = preview
         margin-bottom: 0;
         color: #cccccc;
         font-family: var(--sans-serif);
-    }
-    li:is(:hover, :focus-within) {
-        background-position: 0;
-        background-image: linear-gradient(
-            45deg,
-            rgb(var(--transblue)),
-            rgb(var(--transpink)) 50%
-        );
     }
     li:is(:hover, :focus-within) h3 {
         color: rgb(var(--transpink));
