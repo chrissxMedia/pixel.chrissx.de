@@ -11,7 +11,7 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
     "@shikijs/colorized-brackets": "^3.15.0",
-    "astro": "^7.3.1",
+    "astro": "^7.4.2",
     "cmdesigns": "^0.1.11",
     "simple-icons": "^11.15.0"
   }
