@@ -1,18 +1,22 @@
 ---
 import { BaseLayout, Footer } from "cmdesigns";
+import type { ComponentProps } from "astro/types";
 import favicon from "../favicon.png";
 import Header from "../components/Header.astro";
 
-export interface Props {
+export type Props = Pick<
+    ComponentProps<typeof BaseLayout>,
+    "type" | "article" | "noindex"
+> & {
     title?: string;
     lang?: string;
-}
+};
 
-let { title, lang = "en" } = Astro.props;
+let { title, lang = "en", ...seo } = Astro.props;
 title = title ? `${title} | pixel` : "pixel aka. chrissx";
 ---
 
-<BaseLayout {favicon} {lang} {title} description="pixel's very cool website">
+<BaseLayout {...seo} {favicon} {lang} {title} description="pixel's very cool website">
     <link rel="alternate" type="application/rss+xml" title="pixel's blog" href="/blog/rss.xml" slot="head" />
     <Header />
     <div class="content">
@@ -21,7 +25,6 @@ title = title ? `${title} | pixel` : "pixel aka. chrissx";
     <Footer
         start={2021}
         rightsholder="Pixel Häußler, chrissx Media"
-        link="https://github.com/chrissxMedia/pixel.chrissx.de"
     />
 </BaseLayout>
 
