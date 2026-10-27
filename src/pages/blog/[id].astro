@@ -15,7 +15,13 @@ const {
 const { Content } = await render(Astro.props);
 ---
 
-<Layout {lang} {title}>
+<Layout
+    {lang}
+    {title}
+    type="article"
+    article={{ publishedTime: pub.toISOString(), author: "https://gock.dev/" }}
+    noindex={pub > new Date()}
+>
     <BlogTitle {pub} {lang}><h1>{title}</h1></BlogTitle>
     <div class="md">
         <Content />
