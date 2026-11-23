@@ -1,4 +1,5 @@
 ---
+import { HCard } from "cmdesigns";
 import ArticleCard from "../components/ArticleCard.astro";
 import Link from "../components/Link.astro";
 import Links from "../components/Links.astro";
@@ -27,6 +28,12 @@ const blog = (await getCollection("blog"))
 ---
 
 <Layout>
+    <HCard
+        name="pixel's blog"
+        url="https://gock.dev/"
+        fediverseHandle="blog@gock.dev"
+        hidden
+    />
     <h2>Links</h2>
     <div class="catgrid">
         <Links title="Socials">
